@@ -1,8 +1,23 @@
 ﻿#include <iostream>
 #include <string>
 #include <random>
+#include <fstream>
+#include <chrono>
+#include <iomanip>
+#include <ctime>
 
 short inputStartDataUser;
+short numberOfDecimalPlaces = 20; // Что бы постоянно было фиксированное количество знаков после запятой. Логика такая, что если я захочу поменять количество выводных знаков после запятой, мне достаточно будет тут поменять цифры, а не бегать по коду и искать все выводные данные
+
+std::string GetCurrentDateTime() // Вмеря, для вывода данных о том, сколько шла генерация, сколько времяни происходила сортировка, для ведения логов
+{
+	std::time_t now = std::time(nullptr);
+	std::tm localTime;
+	localtime_s(&localTime, &now);
+	std::ostringstream oss;
+	oss << std::put_time(&localTime, "%d.%m.%Y_%H:%M:%S");
+	return oss.str();
+}
 
 void GreetingForTheUser_void() // Начальная информация для пользователя
 {
@@ -56,68 +71,106 @@ void ChoosingThePathOfTheUsersFirstSubtask_void()
 	std::cout << "0. Вернуться к списку заданий" << std::endl;
 }
 
-void SortingTheArrayAccordingToTheMainOption() // Метод для первой задачи
+void SaveDataToAFile_void(const std::vector<double>& originalData, const std::vector<double>& sortedData, const std::string& filename, short numberOfDecimalPlaces)
 {
-	double RangeOfValuesFrom = 11040, RangeOfValuesTo = 31704;
-	const int NumberOfGenerations = 50;
-	double ArrayOfGeneratedData[NumberOfGenerations];
+	std::ofstream outFile(filename);
+	if (!outFile)
+	{
+		std::cerr << "Ошибка открытия файла: " << filename << std::endl;
+		return;
+	}
 
+	outFile << std::fixed << std::setprecision(numberOfDecimalPlaces);
+
+	// Записываем исходные данные
+	outFile << "=== Исходные данные ===" << std::endl;
+	for (size_t i = 0; i < originalData.size(); ++i)
+	{
+		outFile << originalData[i];
+		if (i != originalData.size() - 1)
+			outFile << " | ";
+	}
+	outFile << std::endl << std::endl;
+
+	// Записываем отсортированные данные
+	outFile << "=== Отсортированные данные ===" << std::endl;
+	for (size_t i = 0; i < sortedData.size(); ++i)
+	{
+		outFile << sortedData[i];
+		if (i != sortedData.size() - 1)
+			outFile << " | ";
+	}
+	outFile << std::endl;
+
+	outFile.close();
+	std::cout << "Данные сохранены в " << filename << std::endl;
+}
+
+void SortingTheArrayAccordingToTheMainOption(int usersChoice) // Метод для первой задачи			*usersChoice - передает тип задачи,которое пользователь выбрал
+{
+	auto startTime = std::chrono::high_resolution_clock::now();
+	double RangeOfValuesFrom = 11040, RangeOfValuesTo = 31704;
+	std::vector<double>	ArrayOfGeneratedData(usersChoice);
+	
 	// переменные для работы метода рандома
 	std:: random_device randomDevice;
 	std:: mt19937 gen(randomDevice());
 	std::uniform_real_distribution<> dis(RangeOfValuesFrom, RangeOfValuesTo);
 
 	// цикл для генерации данных, и записи их в массив
-	for (int i = 0; i < NumberOfGenerations; ++i)
+	for (int i = 0; i < usersChoice; ++i)
 	{
 		ArrayOfGeneratedData[i] = dis(gen);
 	}
-	
+
 	// вывод мокрого ответа
-	std::cout << "--{Сгенерированый массив данных}--------------------------------------------------------" << std::endl;
-	for (int q=0; q < NumberOfGenerations; ++q)
+	std::cout << "--{"<<usersChoice<<" случайно сгенерированных данных}--------------------------------------------------------" << std::endl;
+	for (int q=0; q < usersChoice; ++q)
 	{
-		std::cout << q+1 << "}   " << ArrayOfGeneratedData[q] << std::endl;
+		std::cout << q+1 << "} " << std::fixed << std::setprecision(numberOfDecimalPlaces) << ArrayOfGeneratedData[q] << std::endl;
 	}
 
+	std::vector<double> SortedData = ArrayOfGeneratedData;
+
+	// сортировка перемешиванием
 	// сортировка перемешиванием
 	bool swapped = true;
-	int staret = 0;
-	int end = NumberOfGenerations - 1;
-
+	int start = 0, end = usersChoice - 1;
 	while (swapped)
 	{
-		// Сортировка в одну сторону
 		swapped = false;
-		for (int i = staret; i < end; ++i)
+		for (int i = start; i < end; ++i)
 		{
-			if (ArrayOfGeneratedData[i] > ArrayOfGeneratedData[i + 1])
+			if (SortedData[i] > SortedData[i + 1])
 			{
-				std::swap(ArrayOfGeneratedData[i], ArrayOfGeneratedData[i + 1]);
+				std::swap(SortedData[i], SortedData[i + 1]);
 				swapped = true;
 			}
 		}
-
-		// Сортировка в другую сторону
 		if (!swapped) break;
 		swapped = false;
 		--end;
-		for (int i = end - 1; i >= staret; --i)
+		for (int i = end - 1; i >= start; --i)
 		{
-			if (ArrayOfGeneratedData[i] > ArrayOfGeneratedData[i + 1])
+			if (SortedData[i] > SortedData[i + 1])
 			{
-				std::swap(ArrayOfGeneratedData[i], ArrayOfGeneratedData[i + 1]);
+				std::swap(SortedData[i], SortedData[i + 1]);
 				swapped = true;
 			}
 		}
-		++staret;
+		++start;
 	}
+
 	// Вывод сухого ответа
-	std::cout << "--{Отсортированный массив данных}--------------------------------------------------------" << std::endl;
-	for (int w = 0; w < NumberOfGenerations; ++w)
+	std::cout << "--{"<<usersChoice<<" отсортированно данных}--------------------------------------------------------" << std::endl;
+	for (int w = 0; w < usersChoice; ++w)
 	{
-		std::cout << w + 1 << "}   " << ArrayOfGeneratedData[w] << std::endl;
+		std::cout << w + 1 << "} " << std::fixed << std::setprecision(numberOfDecimalPlaces) << ArrayOfGeneratedData[w] << std::endl;
 	}
+
+	// сохраняем и исходные, и отсортированные данные в один файл
+	std::string filename = "GeneratedAndSorted_" + std::to_string(usersChoice) + ".txt";
+	SaveDataToAFile_void(ArrayOfGeneratedData, SortedData, filename, numberOfDecimalPlaces);
 }
 
 int main()
@@ -132,19 +185,34 @@ int main()
 
 		switch (inputStartDataUser)
 		{
-			case 1: 
+			case 1: // Первая практическая 	   
 			ChoosingThePathOfTheUsersFirstSubtask_void();
-			std::cout << "Ваш выбор: "; std::cin >> inputStartDataUser;
+			std::cout << "Ваш выбор: "; 
+			std::cin >> inputStartDataUser;
 			switch (inputStartDataUser)
 			{
-				case 1: break;
-				case 2: break;
-				case 0: break; // Логика такая, что код как бы выполнился, и мы выходим из switch
+				case 1: SortingTheArrayAccordingToTheMainOption(50); break;
+				case 2: 
+				{
+					long numberOfGenerationsArray[] = {1000, 10000, 100000, 500000, 1000000};
+					for (long stepStep : numberOfGenerationsArray)
+					{
+						SortingTheArrayAccordingToTheMainOption(stepStep);
+					} break;
+				}
+				case 0: break;
 				default: std::cout << "Вы ввели не правильные данные" << std::endl; break;
 			}break;
-
-			case 2: break;
-			case 3: break;
+			/*
+				Логика такая:
+				Пользователь выберает то задание, которое ему интересно, если первое, то генерируем 50 случайных данных
+				Если пользователь выбрал 2 задание, то поочерёдно генерируем массив случайных данных.
+				Если 0, то код считается выполненым и выходим из этого блока кода
+				А так как мы в блоке блоке, то выход реализуется вообще из всех блоков, но так как код в цикле
+				то открывается меню заново.
+			*/
+			case 2: break; // Вторая практическая
+			case 3: break; // Контрольная работа
 			default: std::cout << "Вы ввели не правильные данные" << std::endl; break;
 		}
 		inputStartDataUser = NULL;
