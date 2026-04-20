@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,10 +128,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ChoosingThePathOfTheUsersFirstSubtask.cpp" />
+    <ClCompile Include="GetCurrentDateTime.cpp" />
+    <ClCompile Include="GreetingForTheUser.cpp" />
+    <ClCompile Include="Header_ITiP_2nd_year_2nd_semmester.cpp" />
     <ClCompile Include="ITiP_2nd_year_2nd_semmester.cpp" />
+    <ClCompile Include="SaveDataToAFile.cpp" />
+    <ClCompile Include="SelectingATaskForTheUser.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="SortingTheArrayAccordingToTheMainOption.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InputDataHello.h" />
+    <ClInclude Include="Header_ITiP_2nd_year_2nd_semmester.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
