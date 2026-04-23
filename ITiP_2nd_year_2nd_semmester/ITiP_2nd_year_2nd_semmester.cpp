@@ -57,6 +57,9 @@ int main()
 				}
 				break;
 			}
+			case 2:
+				TheSecondTask_int();
+				break;
 			default:
 				std::cout << "Вы ввели не правильные данные\n";
 				break;

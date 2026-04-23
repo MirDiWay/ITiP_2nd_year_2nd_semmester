@@ -12,5 +12,6 @@
     <ClCompile Include="SortingTheArrayAccordingToTheMainOption.cpp" />
     <ClCompile Include="Header_ITiP_2nd_year_2nd_semmester.cpp" />
     <ClCompile Include="GetCurrentDateTime.cpp" />
+    <ClCompile Include="TheSecondTask.cpp" />
   </ItemGroup>
 </Project>

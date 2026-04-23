@@ -11,6 +11,8 @@
 #include <vector>
 #include <sstream>
 #include <array>
+#include <queue>
+#include <cstdlib>
 
 // глобальные переменные
 extern short inputStartDataUser;
@@ -24,6 +26,7 @@ extern double RangeOfValuesTo;
 void ChoosingThePathOfTheUsersFirstSubtask_void();
 void GreetingForTheUser_void();
 void SelectingATaskForTheUser_void();
+int TheSecondTask_int();
 
 std::string GetCurrentDateTime_void();
 
