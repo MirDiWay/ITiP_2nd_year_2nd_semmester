@@ -60,6 +60,9 @@ int main()
 			case 2:
 				TheSecondTask_int();
 				break;
+			case 3:
+				ControlWork_int();
+				break;
 			default:
 				std::cout << "Вы ввели не правильные данные\n";
 				break;

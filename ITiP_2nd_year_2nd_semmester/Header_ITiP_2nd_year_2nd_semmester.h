@@ -27,6 +27,7 @@ void ChoosingThePathOfTheUsersFirstSubtask_void();
 void GreetingForTheUser_void();
 void SelectingATaskForTheUser_void();
 int TheSecondTask_int();
+int ControlWork_int();
 
 std::string GetCurrentDateTime_void();
 

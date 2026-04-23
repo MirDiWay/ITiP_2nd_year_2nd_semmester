@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ChoosingThePathOfTheUsersFirstSubtask.cpp" />
+    <ClCompile Include="ControlWork.cpp" />
     <ClCompile Include="GetCurrentDateTime.cpp" />
     <ClCompile Include="GreetingForTheUser.cpp" />
     <ClCompile Include="Header_ITiP_2nd_year_2nd_semmester.cpp" />
